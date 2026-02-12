@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField, LoanForm } from '@/app/lib/definitions';
+import { ApplicantField, LoanForm } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,
@@ -15,29 +15,29 @@ export default function EditLoanForm({
   applicants,
 }: {
   loan: LoanForm;
-  applicants: CustomerField[];
+  applicants: ApplicantField[];
 }) {
   return (
     <form>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+          <label htmlFor="applicant" className="mb-2 block text-sm font-medium">
+            Choose applicant
           </label>
           <div className="relative">
             <select
-              id="customer"
-              name="customerId"
+              id="applicant"
+              name="applicantId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={loan.customer_id}
+              defaultValue={loan.applicant_id}
             >
               <option value="" disabled>
-                Select a customer
+                Select a applicant
               </option>
-              {applicants.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
+              {applicants.map((applicant) => (
+                <option key={applicant.id} value={applicant.id}>
+                  {applicant.name}
                 </option>
               ))}
             </select>
@@ -91,15 +91,15 @@ export default function EditLoanForm({
               </div>
               <div className="flex items-center">
                 <input
-                  id="paid"
+                  id="approved"
                   name="status"
                   type="radio"
-                  value="paid"
-                  defaultChecked={loan.status === 'paid'}
+                  value="approved"
+                  defaultChecked={loan.status === 'approved'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="paid"
+                  htmlFor="approved"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Paid <CheckIcon className="h-4 w-4" />

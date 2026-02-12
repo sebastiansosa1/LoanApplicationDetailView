@@ -1,3 +1,6 @@
+import Table from '@/app/ui/dashboard/table'
+
+
 export default function Page() {
-    return <p>Dashboard Page</p>;
+    return  <Table />;
 }

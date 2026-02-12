@@ -1,0 +1,1 @@
+// Functions to execute queries would go here if there was a DB.
