@@ -10,16 +10,15 @@ Software Engineer Role Assignment for an important FinTech company
 (As suggested)
 
 ## How to install:
-- Clone repo with:
-    git clone https://github.com/sebastiansosa1/LoanApplicationDetailView.git
+- In Terminal, cd to the folder where you want to download and clone repo with:
 
-- Install Next.js in the repo folder:
-    cd [Repo-folder]
-    npx create-next-app@latest
-    (make sure you use Tailwind, default installation should have it)
+- git clone https://github.com/sebastiansosa1/LoanApplicationDetailView.git
+- cd LoanApplicationView/nextjs-dashboard
+- npm install && npm run dev
+- Open web browser to localhost:3000 (default)
 
-- Run dev-server:
-    cd nextjs-dashboard
+- To only run dev-server:
+    cd LoanApplicationView/nextjs-dashboard
     npm run dev
 
 
