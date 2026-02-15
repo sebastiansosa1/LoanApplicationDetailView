@@ -1,11 +1,12 @@
-import { Applicant, Loan, DashboardRow } from './definitions.ts';
+import { Applicant, Loan, DashboardRow, LoanStatus } from './definitions';
+
 
 /**
  * In-memory "tables"
  * These reset on refresh.
  */
 
-const applicants: Applicant[] = 
+export const applicants: Applicant[] = 
 [
   {
     id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
@@ -28,7 +29,7 @@ const applicants: Applicant[] =
     name: 'Lee Robinson',
     annual_income: 105000,
     employment_status: 'contractor',
-    credit_score: 850,
+    credit_score: 320,
     email: 'lee@robinson.com'
   },
   {
@@ -44,7 +45,7 @@ const applicants: Applicant[] =
     name: 'Amy Burns',
     annual_income: 150000,
     employment_status: 'full_time',
-    credit_score: 230,
+    credit_score: 115,
     email: 'amy@burns.com'
   },
   {
@@ -57,197 +58,110 @@ const applicants: Applicant[] =
   },
 ];
 
-const loans: Loan[] = 
+export const loans: Loan[] = 
 [
   {
-    id: 703,
+    id: '703',
     applicant_id: applicants[0].id,
     amount: 15795,
     purpose: 'car',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2022-12-06',
   },
   {
-    id: 805,
+    id: '805',
     applicant_id: applicants[1].id,
     amount: 20348,
     purpose: 'car',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2022-11-14',
   },
   {
-    id: 1309,
+    id: '1309',
     applicant_id: applicants[4].id,
     amount: 3040,
     purpose: 'car repairs',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2022-10-29',
   },
   {
-    id: 418,
+    id: '418',
     applicant_id: applicants[3].id,
     amount: 44800,
     purpose: 'car',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-09-10',
   },
   {
-    id: 515,
+    id: '515',
     applicant_id: applicants[5].id,
     amount: 34577,
     purpose: 'car',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-08-05',
   },
   {
-    id: 692,
+    id: '692',
     applicant_id: applicants[2].id,
     amount: 54246,
     purpose: 'house repairs',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-07-16',
   },
   {
-    id: 1717,
+    id: '1717',
     applicant_id: applicants[0].id,
     amount: 666,
     purpose: 'lawn mower',
-    status: 'under_review',
+    status: LoanStatus.Approved,
     date: '2023-06-27',
   },
   {
-    id: 1001,
+    id: '1001',
     applicant_id: applicants[3].id,
     amount: 32545,
     purpose: 'UTE',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-06-09',
   },
   {
-    id: 431,
+    id: '431',
     applicant_id: applicants[4].id,
     amount: 1250,
     purpose: 'bike',
-    status: 'approved',
+    status: LoanStatus.Approved,
     date: '2023-06-17',
   },
   {
-    id: 894,
+    id: '894',
     applicant_id: applicants[5].id,
     amount: 8546,
     purpose: 'car',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-06-07',
   },
   {
-    id: 1003,
+    id: '1003',
     applicant_id: applicants[1].id,
     amount: 500,
     purpose: 'house fixes',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-08-19',
   },
   {
-    id: 1202,
+    id: '1202',
     applicant_id: applicants[5].id,
     amount: 8945,
     purpose: 'boat',
-    status: 'pending',
+    status: LoanStatus.Pending,
     date: '2023-06-03',
   },
   {
-    id: 88,
+    id: '88',
     applicant_id: applicants[2].id,
     amount: 1000,
     purpose: 'bike',
-    status: 'rejected',
+    status: LoanStatus.Rejected,
     date: '2022-06-05',
   },
 ];
-
-/**
- * Utility to simulate async DB latency
- */
-function simulateDelay<T>(data: T, delay = 200): Promise<T> {
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(data), delay)
-  );
-}
-
-/* ============================
-   Applicant "queries"
-============================ */
-
-export async function getApplicants(): Promise<Applicant[]> {
-  return simulateDelay([...applicants]);
-}
-
-export async function getApplicantById(id: string): Promise<Applicant | null> {
-  const applicant = applicants.find((a) => a.id === id) ?? null;
-  return simulateDelay(applicant);
-}
-
-export async function createApplicant(applicant: Applicant): Promise<void> {
-  applicants.push(applicant);
-  return simulateDelay(undefined);
-}
-
-/* ============================
-   Loan "queries"
-============================ */
-
-export async function getLoans(): Promise<Loan[]> {
-  return simulateDelay([...loans]);
-}
-
-export async function getLoansByApplicant(applicantId: string): Promise<Loan[]> {
-  const result = loans.filter((l) => l.applicant_id === applicantId);
-  return simulateDelay(result);
-}
-
-export async function createLoan(loan: Loan): Promise<void> {
-  loans.push(loan);
-  return simulateDelay(undefined);
-}
-
-export async function updateLoanStatus(
-  loanId: string,
-  status: Loan['status']
-): Promise<void> {
-  const loan = loans.find((l) => l.id === loanId);
-  if (!loan) throw new Error('Loan not found');
-
-  loan.status = status;
-  return simulateDelay(undefined);
-}
-
-/* ============================
-   Dashboard "queries"
-============================ */
-
-export async function getDashboardData(): Promise<DashboardRow[]> {
-  const rows = loans.map((loan) => {
-    const applicant = applicants.find(
-      (a) => a.id === loan.applicant_id
-    );
-
-    if (!applicant) {
-      throw new Error(
-        `Applicant not found for loan ${loan.id}`
-      );
-    }
-
-    return {
-      name: applicant.name,
-      annual_income: applicant.annual_income,
-      employment_status: applicant.employment_status,
-      credit_score: applicant.credit_score,
-      amount: loan.amount,
-      purpose: loan.purpose,
-      date: loan.date,
-      status: loan.status,
-    };
-  });
-
-  return simulateDelay(rows);
-}

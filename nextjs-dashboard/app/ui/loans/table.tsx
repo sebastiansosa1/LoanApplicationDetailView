@@ -1,124 +1,112 @@
-import Image from 'next/image';
-import { UpdateLoan, DeleteLoan } from '@/app/ui/loans/buttons';
-import LoanStatus from '@/app/ui/loans/status';
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredLoans } from '@/app/lib/data';
+'use client';
 
-export default async function loansTable({
-  query,
-  currentPage,
-}: {
-  query: string;
-  currentPage: number;
-}) {
-  const loans = await fetchFilteredLoans(query, currentPage);
+import { useEffect, useState } from 'react';
+import { getDashboardData } from '@/app/lib/data';
+import { DashboardRow } from '@/app/lib/definitions';
+import { lusitana } from '@/app/ui/fonts';
+import { LoanStatusDropdown } from './status-dropdown';
+import { CreditScoreBadge } from './credit-score-badge';
+import { formatCurrency } from '@/app/lib/utils';
 
+
+export default function Table({ currentPage }: { currentPage: number }) {
+
+  const [rows, setRows] = useState<DashboardRow[]>([]);
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  async function load() {
+    const data = await getDashboardData(currentPage);
+    setRows(data);
+  }
+  
   return (
-    <div className="mt-6 flow-root">
-      <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
-            {loans?.map((loan) => (
-              <div
-                key={loan.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
-              >
-                <div className="flex items-center justify-between border-b pb-4">
-                  <div>
-                    <div className="mb-2 flex items-center">
-                      <Image
-                        src={loan.image_url}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${loan.name}'s profile picture`}
-                      />
-                      <p>{loan.name}</p>
-                    </div>
-                    <p className="text-sm text-gray-500">{loan.email}</p>
-                  </div>
-                  <LoanStatus status={loan.status} />
-                </div>
-                <div className="flex w-full items-center justify-between pt-4">
-                  <div>
-                    <p className="text-xl font-medium">
-                      {formatCurrency(loan.amount)}
-                    </p>
-                    <p>{formatDateToLocal(loan.date)}</p>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <UpdateLoan id={loan.id} />
-                    <DeleteLoan id={loan.id} />
-                  </div>
-                </div>
-              </div>
-            ))}
+    <div className="w-full">
+      <div className="mt-6 flow-root">
+        <div className="overflow-x-auto">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
+              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
+
+                <thead className="text-center rounded-md bg-gray-50 text-left text-sm font-normal">
+                  <tr>
+                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                      <b>Name</b>
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      <b>Annual Income</b>
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      <b>Employment Status</b>
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      <b>Credit Score</b>
+                    </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      <b>Amount</b>
+                    </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      <b>Purpose</b>
+                    </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      <b>Application Date</b>
+                    </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      <b>Status</b>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="text-center divide-y divide-gray-200 text-gray-900">
+                  {rows?.map((row, index) => (
+                    <tr key={index} className="group">
+                      {/* Name */}
+                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <p>{row.name}</p>
+                        </div>
+                      </td>
+                      {/* Annual Income */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {formatCurrency(row.annual_income)}
+                      </td>
+                      {/* Employment Status */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {row.employment_status}
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        <CreditScoreBadge score={row.credit_score} />
+                      </td>
+                      {/* Ammount */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {formatCurrency(row.amount)}
+                      </td>
+                      {/* Purpose */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {row.purpose}
+                      </td>
+                      {/* Application Date */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {row.date}
+                      </td>
+                      {/* Status */}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                        <LoanStatusDropdown 
+                          loan_id={row.loan_id} 
+                          current_status={row.status} 
+                          onStatusUpdated={load}
+                        ></LoanStatusDropdown>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-sm font-normal">
-              <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Date
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Status
-                </th>
-                <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {loans?.map((loan) => (
-                <tr
-                  key={loan.id}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={loan.image_url}
-                        className="rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${loan.name}'s profile picture`}
-                      />
-                      <p>{loan.name}</p>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {loan.email}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(loan.amount)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(loan.date)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <LoanStatus status={loan.status} />
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
-                      <UpdateLoan id={loan.id} />
-                      <DeleteLoan id={loan.id} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
-    </div>
+    </div>     
   );
 }
