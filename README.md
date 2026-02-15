@@ -12,17 +12,17 @@ Software Engineer Role Assignment for an important FinTech company
 ## How to install:
 - In Terminal, cd to the folder where you want to download and clone repo with:
 
-git clone https://github.com/sebastiansosa1/LoanApplicationDetailView.git
+    git clone https://github.com/sebastiansosa1/LoanApplicationDetailView.git
 
-cd LoanApplicationDetailView/nextjs-dashboard
+    cd LoanApplicationDetailView/nextjs-dashboard
 
-npm install && npm run dev
+    npm install && npm run dev
 
 - Open web browser to localhost:3000 (default)
 
 - To run dev-server after installed:
-cd LoanApplicationView/nextjs-dashboard
-npm run dev
+    cd LoanApplicationView/nextjs-dashboard
+    npm run dev
 
 
 ## What?
@@ -61,13 +61,13 @@ npm run dev
             
 
 ## How?
-    I grabbed an already existing dashboard app skeleton as a base, and then designed and implemented the Loans page, and almost everything else on my own. I have made a heaps of changes to the original skeleton and the architecture, to accomodate for the requirements of the assignment.
-    For example, the data base are only in-memory "tables" (arrays), and the data.ts file (where the queries are made) is a server component., so, when you change a loan status for example, and refresh the page, the new state will remain as you left it, until you reload the server.
-	I've reshaped some of the features that were already there, such as pagination, to accomodate to the mock-up table.
-    The DB has been designed by myself only to cover the basic requirements for the demo app. Assuming 1 table for applicants, 1 table for loans, and the ability for the same applicant to take multiple loans(closer to a real-life case). I took the "be creative" statement from the assignment very seriously, although I didn't implement a table for Status History, since it was not required in the front-end.
+I grabbed an already existing dashboard app skeleton as a base, and then designed and implemented the Loans page, and almost everything else on my own. I have made a heaps of changes to the original skeleton and the architecture, to accomodate for the requirements of the assignment.
+For example, the data base are only in-memory "tables" (arrays), and the data.ts file (where the queries are made) is a server component., so, when you change a loan status for example, and refresh the page, the new state will remain as you left it, until you reload the server.
+I've reshaped some of the features that were already there, such as pagination, to accomodate to the mock-up table.
+The DB has been designed by myself only to cover the basic requirements for the demo app. Assuming 1 table for applicants, 1 table for loans, and the ability for the same applicant to take multiple loans(closer to a real-life case). I took the "be creative" statement from the assignment very seriously, although I didn't implement a table for Status History, since it was not required in the front-end.
 
 ## Why?
-    I grabbed an already existing skeleton to save some time and "not reinvent the wheel", but also to prove that I can also work on existing projects, as well as designing it on my own, like I did with the features requested.
+I grabbed an already existing skeleton to save some time and "not reinvent the wheel", but also to prove that I can also work on existing projects, as well as designing it on my own, like I did with the features requested.
 
 
 I really hope enjoy reviewing my assignment, and feel free to contact me for a more technical and in-dept discussion.
